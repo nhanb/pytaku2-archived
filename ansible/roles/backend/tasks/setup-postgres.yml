@@ -1,0 +1,47 @@
+---
+
+- name: install postgresql & tools
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 86400
+  with_items:
+    - postgresql-9.4
+    - postgresql-client-9.4
+    - libpq-dev
+    - python-psycopg2
+  become: yes
+  become_user: root
+
+
+- name: create db
+  postgresql_db:
+    name: "{{ db_name }}"
+  become: yes
+  become_user: postgres
+
+
+- name: create db user
+  postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: ALL
+  become: yes
+  become_user: postgres
+
+
+- name: create set-env.sh script
+  template:
+    src: set-env.sh.j2
+    dest: "/home/{{ app_user }}/set-env.sh"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0644
+
+
+- name: automatically run set-env.sh on login
+  lineinfile:
+    dest: "/home/{{ app_user }}/.profile"
+    line: "source /home/{{ app_user }}/set-env.sh"

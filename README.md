@@ -7,7 +7,7 @@
 - Python 3.4
 
 ```bash
-sudo apt-get install python3-venv
+sudo apt-get install python3-venv libpq-dev
 python3 -m venv ~/.venvs/pytaku
 ~/.venvs/pytaku/bin/activate
 pip install -r backend/requirements-dev.txt

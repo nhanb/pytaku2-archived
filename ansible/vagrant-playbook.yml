@@ -7,4 +7,13 @@
     - app_name: pytaku
     - app_user: vagrant
     - venv_dir: "/home/{{ app_user }}/{{ app_name }}-venv"
-    - app_dir: "/pytaku/backend"
+    - app_dir: /pytaku/backend
+    - db_name: "{{ app_name }}"
+    - db_user: "{{ app_user }}"
+    - db_password: password
+    - django_settings:
+        secret_key: 'tya6mz)vk@tb%49_953gl2sx&8o=o=(+vml5r($fkd86wf1^o0'
+        allowed_hosts:
+          - pytaku.local
+          - localhost
+          - 127.0.0.1

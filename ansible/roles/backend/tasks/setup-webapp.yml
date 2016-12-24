@@ -18,3 +18,12 @@
   pip:
     requirements: "{{ app_dir }}/requirements.txt"
     executable: "{{ venv_dir }}/bin/pip"
+
+
+- name: generate settings file
+  template:
+    src: settings.py.j2
+    dest: "{{ app_dir }}/pytaku/settings.py"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0644

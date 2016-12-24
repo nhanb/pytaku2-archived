@@ -1,4 +1,6 @@
 /.vagrant
+/ansible/*.retry
+/backend/pytaku/settings.py
 
 *.pyc
 *.sqlite3

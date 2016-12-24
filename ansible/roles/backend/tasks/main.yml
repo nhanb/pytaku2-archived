@@ -2,4 +2,5 @@
 
 - include: upgrade-system.yml
 - include: setup-venv.yml
+- include: setup-postgres.yml
 - include: setup-webapp.yml
