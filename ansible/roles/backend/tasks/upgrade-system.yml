@@ -1,0 +1,16 @@
+---
+
+# TODO: should probably look into unattended-upgrades
+
+- name: upgrade to ensure no meme vulns
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 86400
+  with_items:
+    - bash
+    - openssl
+    - ca-certificates
+  become: yes
+  become_user: root

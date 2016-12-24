@@ -10,10 +10,14 @@
 sudo apt-get install python3-venv
 python3 -m venv ~/.venvs/pytaku
 ~/.venvs/pytaku/bin/activate
-pip install -r requirements-dev.txt
+pip install -r backend/requirements-dev.txt
 
 # https://github.com/mitchellh/vagrant/issues/6769#issuecomment-252151694
 # TL;DR: installs Guest Additions automatically so vboxfs shared folder syncing works
 vagrant plugin install vagrant-vbguest
-vagrant up
+vagrant up --provision
+
+vagrant ssh
+./manage.py migrate
+./manage.py runserver 0.0.0.0:8000
 ```

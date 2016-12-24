@@ -18,4 +18,11 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder ".", "/pytaku", type: "virtualbox"
 
+  config.vm.provision "ansible" do |ansible|
+    ansible.verbose = "v"
+    ansible.inventory_path = "./ansible/inventories/vagrant"
+    ansible.limit = "all"
+    ansible.playbook = "ansible/vagrant-playbook.yml"
+  end
+
 end

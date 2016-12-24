@@ -1,0 +1,20 @@
+---
+
+- name: create app dir
+  file:
+    state: directory
+    path: "{{ app_dir }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+
+
+- name: automatically cd into app dir on login
+  lineinfile:
+    dest: "/home/{{ app_user }}/.profile"
+    line: "cd {{ app_dir }}"
+
+
+- name: install pip packages
+  pip:
+    requirements: "{{ app_dir }}/requirements.txt"
+    executable: "{{ venv_dir }}/bin/pip"

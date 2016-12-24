@@ -1,0 +1,10 @@
+---
+
+- hosts: webservers
+  roles:
+    - backend
+  vars:
+    - app_name: pytaku
+    - app_user: vagrant
+    - venv_dir: "/home/{{ app_user }}/{{ app_name }}-venv"
+    - app_dir: "/pytaku/backend"

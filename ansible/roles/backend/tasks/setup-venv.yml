@@ -1,0 +1,33 @@
+---
+
+- name: install apt packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 86400
+  with_items:
+    - python3.4
+    - python3.4-dev
+    - python3.4-venv
+  become: yes
+  become_user: root
+
+
+- name: create venv
+  command: "python3.4 -m venv {{ venv_dir }}"
+  args:
+    creates: "{{ venv_dir }}"
+
+
+- name: automatically activate venv on login
+  lineinfile:
+    dest: "/home/{{ app_user }}/.profile"
+    line: "source {{ venv_dir }}/bin/activate"
+
+
+- name: update pip
+  pip:
+    name: pip
+    state: latest
+    executable: "{{ venv_dir }}/bin/pip"
