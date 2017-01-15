@@ -8,6 +8,8 @@
 
 ```bash
 sudo apt-get install python3-venv libpq-dev
+# or for arch users:
+# sudo pacman -S postgresql-libs net-tools
 python3 -m venv ~/.venvs/pytaku
 ~/.venvs/pytaku/bin/activate
 pip install -r backend/requirements-dev.txt
