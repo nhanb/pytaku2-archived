@@ -23,3 +23,5 @@ vagrant ssh
 ./manage.py migrate
 ./manage.py runserver 0.0.0.0:8000
 ```
+
+Helper scripts are in `scripts/` dir. Meant to be run from dev host machine.

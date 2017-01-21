@@ -21,6 +21,7 @@
 
 
 - name: generate settings file
+  tags: settings
   template:
     src: settings.py.j2
     dest: "{{ app_dir }}/pytaku/settings.py"
