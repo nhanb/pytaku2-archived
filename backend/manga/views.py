@@ -1,19 +1,24 @@
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from .serializers import UserSerializer, GroupSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from fundoshi import search_series
+
+from .serializers import SearchSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class ListSearchResults(APIView):
     """
-    API endpoint that allows users to be viewed or edited.
+    View to search for series by name.
     """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
 
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+    def get(self, request, format=None):
+        """
+        Return a list of all matching results.
+        """
+        serializer = SearchSerializer(data=request.query_params)
+        if serializer.is_valid(raise_exception=True):
+            print(serializer.validated_data)
+            query = serializer.validated_data['query']
+            results = [r for r in search_series(query)]
+            return Response(results)

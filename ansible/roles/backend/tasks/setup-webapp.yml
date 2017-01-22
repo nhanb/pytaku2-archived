@@ -15,9 +15,21 @@
 
 
 - name: install pip packages
+  tags: pip-install
   pip:
     requirements: "{{ app_dir }}/requirements.txt"
     executable: "{{ venv_dir }}/bin/pip"
+
+
+- name: install nodejs
+  tags: nodejs
+  apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+    cache_valid_time: 86400
+  become: yes
+  become_user: root
 
 
 - name: generate settings file
