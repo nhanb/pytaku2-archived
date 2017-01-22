@@ -2,4 +2,4 @@ django
 psycopg2
 djangorestframework
 markdown
-fundoshi==0.0.5
+fundoshi==0.0.6
