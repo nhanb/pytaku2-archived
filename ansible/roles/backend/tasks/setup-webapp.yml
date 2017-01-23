@@ -40,3 +40,9 @@
     owner: "{{ app_user }}"
     group: "{{ app_user }}"
     mode: 0644
+
+
+- name: run migrations
+  tags: migrate
+  command: "/home/{{ app_user }}/run-inside-venv.sh
+            {{ app_dir }}/manage.py migrate"

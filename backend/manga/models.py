@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField, JSONField
+from django.utils.timezone import now
 
 
 class Title(models.Model):
@@ -11,19 +12,26 @@ class Title(models.Model):
     descriptions = ArrayField(models.TextField())
     tags = ArrayField(models.CharField(max_length=100))
     last_updated = models.DateTimeField(auto_now=True)
+    chapters = JSONField()
 
     def __str__(self):
         return self.name
+
+    def is_old(self):
+        return (now() - self.last_updated).days >= 1
 
 
 class Chapter(models.Model):
-    name = models.CharField(max_length=300, blank=False)
     url = models.URLField(unique=True, blank=False)
-    pages = ArrayField(models.CharField(max_length=300), null=True)
-    title = models.ForeignKey(Title,
-                              related_name='chapters',
-                              on_delete=models.CASCADE)
+    name = models.CharField(max_length=300, blank=False)
+    pages = ArrayField(models.CharField(max_length=300), default=[])
     last_updated = models.DateTimeField(auto_now=True)
+
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_old(self):
+        return (now() - self.last_updated).days >= 1

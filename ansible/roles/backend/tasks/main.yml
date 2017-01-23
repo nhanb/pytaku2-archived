@@ -1,6 +1,13 @@
 ---
 
 - include: upgrade-system.yml
+  tags: upgrade
+
 - include: setup-venv.yml
+  tags: venv
+
 - include: setup-postgres.yml
+  tags: postgres
+
 - include: setup-webapp.yml
+  tags: webapp

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# {{ ansible_managed }}
+
+# Wrapper script to run command inside app's venv.
+# Especially helpful for running python commands from an ansible task.
+#
+# Example: ~/run-inside-venv.sh manage.py migrate
+
+# Abort on first error
+set -e
+
+source "{{ venv_dir }}/bin/activate"
+$@

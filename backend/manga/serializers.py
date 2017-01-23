@@ -10,37 +10,50 @@ class TitleViewSerializer(serializers.Serializer):
     url = serializers.URLField(required=True)
 
 
-class ChapterSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True)
+class ChapterViewSerializer(serializers.Serializer):
     url = serializers.URLField(required=True)
 
-    def create(self, validated_data):
-        return Chapter.objects.create(**validated_data)
 
-
-class TitleUpdateSerializer(serializers.ModelSerializer):
-    chapters = ChapterSerializer(many=True)
+class TitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
         fields = '__all__'
         read_only_fields = ('last_updated',)
 
-    def create(self, validated_data):
-        chapters = validated_data.pop('chapters', [])
-        title = Title.objects.create(**validated_data)
 
-        if chapters:
-            Chapter.objects.bulk_create([
-                Chapter(title=title, **chapter) for chapter in chapters
-            ])
+class ChapterSerializer(serializers.ModelSerializer):
+    title = serializers.PrimaryKeyRelatedField(queryset=Title.objects.all())
+    title_data = serializers.SerializerMethodField()
+    adjacent_chapters = serializers.SerializerMethodField()
 
-        title.save()
-        return title
+    def get_title_data(self, obj):
+        title = obj.title
+        return {
+            'url': title.url,
+            'name': title.name,
+        }
 
-    # def update(self, instance, validated_data):
-        # instance.email = validated_data.get('email', instance.email)
-        # instance.content = validated_data.get('content', instance.content)
-        # instance.created = validated_data.get('created', instance.created)
-        # instance.save()
-        # return instance
+    def get_adjacent_chapters(self, obj):
+        chapters = obj.title.chapters
+        prev, next = None, None
+
+        # Application-level query. Longest title that I know of has around
+        # 900-something chapters (good job Aoyama sensei) so it's not that bad.
+        for index, chapter in enumerate(chapters):
+            if chapter['url'] == obj.url:
+                if index > 0:
+                    prev = chapters[index - 1]
+                if index < len(chapters) - 1:
+                    next = chapters[index + 1]
+                break
+
+        return {
+            'previous': prev,
+            'next': next,
+        }
+
+    class Meta:
+        model = Chapter
+        fields = '__all__'
+        read_only_fields = ('last_updated',)

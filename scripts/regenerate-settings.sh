@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 
-ansible-playbook \
-  -i ansible/inventories/vagrant ansible/vagrant-playbook.yml \
-  -u vagrant \
-  --private-key='.vagrant/machines/default/virtualbox/private_key' \
-  --tags settings
+DIR="${BASH_SOURCE%/*}"
+"$DIR/run-ansible-tags.sh" settings

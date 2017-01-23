@@ -31,3 +31,12 @@
     name: pip
     state: latest
     executable: "{{ venv_dir }}/bin/pip"
+
+
+- name: create run-inside-venv wrapper script
+  template:
+    src: run-inside-venv.sh.j2
+    dest: "/home/{{ app_user }}/run-inside-venv.sh"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0744
